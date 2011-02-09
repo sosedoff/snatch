@@ -44,7 +44,7 @@ begin
   optparse.parse!
   
   unless ARGV.empty?
-    file = "#{Dir.pwd}/#{ARGV.shift}"
+    file = File.expand_path(ARGV.shift)
     unless File.exists?(file)
       puts "File #{file} was not found!"
       exit
@@ -61,6 +61,6 @@ rescue OptionParser::InvalidOption, OptionParser::MissingArgument
   exit
 rescue Interrupt
   puts "Interrupted."
-rescue StandardError => ex
+rescue StandardError, Snatch::CredentialsError, Snatch::NoDatabaseError => ex
   puts "ERROR: #{ex.message}"
 end
