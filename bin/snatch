@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+
+lib = File.expand_path(File.dirname(__FILE__) + '/../lib')
+$LOAD_PATH.unshift(lib) if File.directory?(lib) && !$LOAD_PATH.include?(lib)
+
+require 'rubygems'
+require 'yaml'
+require 'optparse'
+require 'snatch'
+
+SAMPLE_SCHEMA = <<END
+---
+host: YOUR_HOSTNAME
+user: YOUR_SSH_USER
+password: YOUR_SSH_PASSWORD
+db_user: MYSQL_USER
+db_password: MYSQL_PASSWORD
+db_list:
+- database1
+- database2
+END
+
+optparse = OptionParser.new do |opts|
+  opts.banner = "Usage: snatch CONFIG.yml"
+  opts.on('-i', '--info', 'Display this information.') { puts opts ; exit }
+  opts.on('-v', '--version', 'Show version') { puts "Snatch v#{Snatch::VERSION}" ; exit }
+  opts.on('-n', '--new NAME', 'Create a new config file') do |name|
+    unless name =~ /^[a-z\d\_\-]{2,64}$/i
+      puts "Name should be in format: [A-Za-z0-9\-\_]{2,64}"
+      exit
+    end
+    
+    file = "#{Dir.pwd}/#{name}.yml"
+    if File.exists?(file)
+      puts "File already exists!" ; exit
+    end
+    
+    File.open(file, 'w') { |f| f.write(SAMPLE_SCHEMA) }
+    puts "File #{file} has been created. Edit and snatch!" ; exit
+  end
+end
+
+begin
+  optparse.parse!
+  
+  unless ARGV.empty?
+    file = "#{Dir.pwd}/#{ARGV.shift}"
+    unless File.exists?(file)
+      puts "File #{file} was not found!"
+      exit
+    end
+    
+    config = YAML.load_file(file)
+    config.symbolize!
+    Snatch.run(config)
+  else
+    puts optparse
+  end
+rescue OptionParser::InvalidOption, OptionParser::MissingArgument
+  puts optparse
+  exit
+rescue Interrupt
+  puts "Interrupted."
+rescue StandardError => ex
+  puts "ERROR: #{ex.message}"
+end
