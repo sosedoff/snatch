@@ -61,6 +61,7 @@ module Snatch
       cmd << "--password=#{@config[:db_password]}" unless @config[:db_password].strip.empty?
       cmd << "--databases #{@config[:db_list].join(' ')}"
       cmd << "--add-drop-database"
+      cmd << "--add-drop-table"
       cmd << "--compact"
       cmd = "mysqldump #{cmd.join(' ')} | gzip --best > /tmp/#{filename}"
       
