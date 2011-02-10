@@ -5,7 +5,7 @@ Gem::Specification.new do |s|
   s.version     = Snatch::VERSION
   s.date        = Time.now.strftime("%Y-%m-%d")
   s.description = "Remote database downloader"
-  s.summary     = "Snatch is a remote database downloader based on SSH"
+  s.summary     = "Snatch is a remote database downloader via SSH protocol"
   s.authors     = ["Dan Sosedoff"]
   s.email       = "dan.sosedoff@gmail.com"
   s.homepage    = "http://github.com/sosedoff/snatch"
