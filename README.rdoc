@@ -1,0 +1,54 @@
+= Snatch
+
+Snatch is a console tool to download a remote MySQL database dump via SSH protocol.
+
+Does not require to install anything on server.
+
+== Installation
+
+gem install snatchdb
+
+== Usage
+
+To create a new snatch profile just type
+
+  snatch --new PROFILE_NAME
+  
+That will generate a sample YAML formatted profile in current directory.
+Use your favorite editor to change the server settings.
+
+Sample config:
+
+  ---
+  host: YOUR_HOSTNAME
+  user: YOUR_SSH_USER
+  password: YOUR_SSH_PASSWORD
+  db_user: MYSQL_USER
+  db_password: MYSQL_PASSWORD
+  db_list:
+    - database1
+    - database2
+    
+Parameters:
+- host: Remove server hostname
+- user: Remove server ssh user
+- password: Remote server ssh password (can leave as is if using ssh public key auth)
+- db_user: Local MySQL server username
+- db_password: MySQL server password (leave blank if no password)
+- db_list: List of all databases to dump
+
+To download a dump type:
+
+  snatch /path/to/config.yml
+  
+Snatch is handling the following errors:
+- Invalid SSH credentials
+- Invalid MySQL credentials
+- Requested database is not found
+
+If everything works fine you will get a file "host_timestamp.sql.gz" in your current directory.
+Just import into your mysql server and you're ready to go.
+
+== Copyright
+
+Copyright © 2011 Dan Sosedoff.
