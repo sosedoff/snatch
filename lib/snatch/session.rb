@@ -58,7 +58,7 @@ module Snatch
     def dump
       cmd = []
       cmd << "--user=#{@config[:db_user]}"
-      cmd << "--password=#{@config[:db_password]}" unless @config[:db_password].empty?
+      cmd << "--password=#{@config[:db_password]}" unless @config[:db_password].strip.empty?
       cmd << "--databases #{@config[:db_list].join(' ')}"
       cmd << "--add-drop-database"
       cmd << "--compact"
