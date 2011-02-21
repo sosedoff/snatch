@@ -59,10 +59,10 @@ module Snatch
       cmd = []
       cmd << "--user=#{@config[:db_user]}"
       cmd << "--password=#{@config[:db_password]}" unless @config[:db_password].to_s.strip.empty?
-      cmd << "--databases #{@config[:db_list].join(' ')}"
       cmd << "--add-drop-database"
       cmd << "--add-drop-table"
       cmd << "--compact"
+      cmd << "--databases #{@config[:db_list].join(' ')}"
       cmd = "mysqldump #{cmd.join(' ')} | gzip --best > /tmp/#{filename}"
       
       puts "mysql: creating a dump..."
