@@ -7,6 +7,7 @@ module Snatch
     
     def initialize(config)
       @config = config
+      @config[:port] = config[:port] || 22
       @ssh = nil
       @filename = "#{@config[:host]}_#{Time.now.strftime("%Y%m%d%H%M%S")}.sql.gz"
     end
@@ -26,7 +27,7 @@ module Snatch
     def connect
       puts "ssh: connecting..."
       begin
-        @ssh = Net::SSH.start(@config[:host], @config[:user],:password => @config[:password])
+        @ssh = Net::SSH.start(@config[:host], @config[:user], :port => @config[:port], :password => @config[:password])
       rescue Net::SSH::AuthenticationFailed
         raise CredentialsError, 'Invalid SSH user or password'
       end
@@ -77,7 +78,7 @@ module Snatch
     
     # Fetch remote dump to local filesystem
     def download
-      Net::SFTP.start(@config[:host], @config[:user], :password => @config[:password]) do |sftp|
+      Net::SFTP.start(@config[:host], @config[:user], :port => @config[:port], :password => @config[:password]) do |sftp|
         t = sftp.download!(
           "/tmp/#{filename}",                  # Remote file
           "#{Dir.pwd}/#{filename}",            # Local file
