@@ -11,6 +11,7 @@ require 'snatch'
 SAMPLE_SCHEMA = <<END
 ---
 host: YOUR_HOSTNAME
+port: 22
 user: YOUR_SSH_USER
 password: YOUR_SSH_PASSWORD
 db_user: MYSQL_USER
