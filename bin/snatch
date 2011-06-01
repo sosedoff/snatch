@@ -45,9 +45,15 @@ begin
   optparse.parse!
   
   unless ARGV.empty?
-    file = File.expand_path(ARGV.shift)
+    filename = ARGV.shift.strip
+    if File.extname(filename).empty?
+      file = File.join(Snatch.root, "#{filename}.yml")
+    else
+      file = File.expand_path(filename)
+    end
+    
     unless File.exists?(file)
-      puts "File #{file} was not found!"
+      puts "File \"#{file}\" was not found!"
       exit
     end
     
