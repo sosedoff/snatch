@@ -1,6 +1,7 @@
 module Snatch
   class CredentialsError < Exception ; end
-  class NoDatabaseError < Exception ; end
+  class NoDatabaseError  < Exception ; end
+  class NoServiceError   < Exception ; end
   
   class Session
     attr_reader :config, :filename
@@ -42,6 +43,9 @@ module Snatch
     
     # Check configuration options
     def test
+      raise NoServiceError, "No mysql found." unless @ssh.exec!("which mysql") =~ /mysql/i
+      raise NoServiceError, "No mysqldump found." unless @ssh.exec!("which mysqldump") =~ /mysqldump/i
+      
       resp = @ssh.exec!("mysql --execute='SHOW DATABASES;' --user=#{@config[:db_user]} --password=#{@config[:db_password]}")
       if resp =~ /ERROR 1045/
         raise CredentialsError, 'Invalid MySQL user or password'

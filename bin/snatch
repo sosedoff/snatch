@@ -84,6 +84,6 @@ rescue OptionParser::InvalidOption, OptionParser::MissingArgument
   exit
 rescue Interrupt
   puts "Interrupted."
-rescue StandardError, Snatch::CredentialsError, Snatch::NoDatabaseError => ex
+rescue StandardError, Snatch::CredentialsError, Snatch::NoServiceError, Snatch::NoDatabaseError => ex
   puts "ERROR: #{ex.message}"
 end
