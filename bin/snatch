@@ -39,6 +39,22 @@ optparse = OptionParser.new do |opts|
     File.open(file, 'w') { |f| f.write(SAMPLE_SCHEMA) }
     puts "File #{file} has been created. Edit and snatch!" ; exit
   end
+  
+  opts.on('-l', '--list', 'List all available config files') do
+    files = Dir[File.join(Snatch.root, '*.yml')]
+    
+    unless files.empty?
+      puts "Configuration files:"
+      files.each do |path|
+        puts " - #{File.basename(path, '.yml')}" if Snatch.valid_config?(path)
+      end
+      puts "TIP: Just type 'snatch NAME' and i will download that database."
+    else
+      puts "No available configs are available."
+    end
+    
+    exit
+  end
 end
 
 begin

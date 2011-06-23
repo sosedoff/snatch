@@ -15,4 +15,14 @@ module Snatch
     s = Snatch::Session.new(config)
     s.run!
   end
+  
+  # Returns true if snatch config is valid
+  def self.valid_config?(path)
+    data = YAML.load_file(path)
+    if data.kind_of?(Hash)
+      (data.keys & ['host']).size == 1
+    else
+      false
+    end
+  end
 end
