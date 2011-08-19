@@ -6,7 +6,7 @@ Does not require to install anything on server.
 
 == Installation
 
-gem install snatchdb
+  gem install snatchdb
 
 == Usage
 
@@ -30,9 +30,10 @@ Sample config:
     - database2
     
 Parameters:
-- host: Remove server hostname
-- user: Remove server ssh user
+- host: Remote server hostname
+- user: Remote server ssh user
 - password: Remote server ssh password (can leave as is if using ssh public key auth)
+- port: Retote server ssh server port (default: 22)
 - db_user: Local MySQL server username
 - db_password: MySQL server password (leave blank if no password)
 - db_list: List of all databases to dump
