@@ -61,15 +61,21 @@ module Snatch
     
     # Generate MySQL database dump
     def dump
+      multiple = @config[:db_list].size > 1
+      
       cmd = []
       cmd << "--user=#{@config[:db_user]}"
       cmd << "--password=#{@config[:db_password]}" unless @config[:db_password].to_s.strip.empty?
-      cmd << "--add-drop-database"
-      cmd << "--add-drop-table"
       cmd << "--compact"
-      cmd << "--databases #{@config[:db_list].join(' ')}"
+      cmd << "--add-drop-table"
+      cmd << "--add-drop-database" if multiple
+      if multiple
+        cmd << "--databases #{@config[:db_list].join(' ')}"
+      else
+        cmd << "#{@config[:db_list][0]}"
+      end      
       cmd = "mysqldump #{cmd.join(' ')} | gzip --best > /tmp/#{filename}"
-      
+
       puts "mysql: creating a dump..."
       @ssh.exec!(cmd)
       puts "mysql: done."
